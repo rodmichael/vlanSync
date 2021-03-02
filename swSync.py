@@ -44,7 +44,7 @@ class swSync(threading.Thread):
 
     def getVLANS(self):
         results = {}
-        output, err = self.execCommand("show vlans")
+        output, err = self.execCommand("show vlan")
         # output, err = self.execCommand("cat vlan")
         logger.info("Retrieving VLANs from switch...")
         if not err:
