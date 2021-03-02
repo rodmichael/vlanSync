@@ -44,8 +44,8 @@ class swSync(threading.Thread):
 
     def getVLANS(self):
         results = {}
-        # output, err = self.execCommand("show vlans")
-        output, err = self.execCommand("cat vlan")
+        output, err = self.execCommand("show vlans")
+        # output, err = self.execCommand("cat vlan")
         logger.info("Retrieving VLANs from switch...")
         if not err:
             for i in range(2, len(output)):
@@ -60,102 +60,89 @@ class swSync(threading.Thread):
 
 
     def addOrUpdateVLAN(self, vId, name):
-        # try:
-            # self.client.connect(hostname=self.hostname, username=self.username, pkey=self.pKey)
-            # logger.debug(f"Connected to {self.hostname}")
+        try:
+            self.client.connect(hostname=self.hostname, username=self.username, pkey=self.pKey)
+            logger.debug(f"Connected to {self.hostname}")
 
-            # conn = self.client.invoke_shell()
+            conn = self.client.invoke_shell()
 
-            # conn.send("conf t\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("conf t\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send(f"vlan {vId}\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send(f"vlan {vId}\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send(f"name {name}\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send(f"name {name}\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("exit\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("exit\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("write memory\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("write memory\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("end\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
-            # self.getVLANS()
+            conn.send("end\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-        # except Exception as ee:
-        #     logger.error(f"An error occurred when trying to add/update vlan {vId} on switch. Error: '{ee}'")
-        #     pass
-
-        output, err = self.execCommand(f"echo '{vId}   {name}                          active    Fa5/9' >> /home/ubuntu/vlan")
-        if not err:
             logger.info(f"VLAN {vId} has been added/updated on switch")
             self.getVLANS()
-        else:
-            logger.error(f"An error occurred when trying to add/update vlan {vId}")
+
+        except Exception as ee:
+            logger.error(f"An error occurred when trying to add/update vlan {vId} on switch. Error: '{ee}'")
+            pass
+
+        # output, err = self.execCommand(f"echo '{vId}   {name}                          active    Fa5/9' >> /home/ubuntu/vlan")
+        # if not err:
+        #     logger.info(f"VLAN {vId} has been added/updated on switch")
+        #     self.getVLANS()
+        # else:
+        #     logger.error(f"An error occurred when trying to add/update vlan {vId}")
 
 
     def deleteVLAN(self, vId):
-        # try:
-            # self.client.connect(hostname=self.hostname, username=self.username, pkey=self.pKey)
-            # logger.debug(f"Connected to {self.hostname}")
+        try:
+            self.client.connect(hostname=self.hostname, username=self.username, pkey=self.pKey)
+            logger.debug(f"Connected to {self.hostname}")
 
-            # conn = self.client.invoke_shell()
+            conn = self.client.invoke_shell()
 
-            # conn.send("conf t\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("conf t\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send(f"no vlan {vId}\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send(f"no vlan {vId}\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("exit\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("exit\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("write memory\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
+            conn.send("write memory\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-            # conn.send("end\n")
-            # time.sleep(.5)
-            # output = conn.recv(65535)
-            # self.getVLANS()
+            conn.send("end\n")
+            time.sleep(.5)
+            output = conn.recv(65535)
 
-        # except Exception as ee:
-        #     logger.error(f"An error occurred when trying to delete vlan {vId} on switch. Error: '{ee}'")
-        #     pass
-
-        output, err = self.execCommand(f"sed -i '/^{vId} /'d vlan /home/ubuntu/vlan")
-        if not err:
             logger.info(f"VLAN {vId} has been deleted from switch")
             self.getVLANS()
-        else:
-            logger.error(f"An error occurred when trying to add/update vlan {vId}")
 
+        except Exception as ee:
+            logger.error(f"An error occurred when trying to delete vlan {vId} on switch. Error: '{ee}'")
+            pass
 
-
-if __name__ == "__main__":
-    with open("config.json", "r") as file:
-        config = json.load(file)
-    
-    swHostname= config["switchDetails"]["switch"]
-    swUsername = config["switchDetails"]["username"]
-    swPKey = config["switchDetails"]["privateKeyPath"]
-    swClient = swSync(swHostname, swUsername, swPKey)
-    # output, err = swClient.execCommand("show vlan")
-    # output, err = swClient.execCommand("cat vlan")
-    # if not err:
-    #     for i in range(2, len(output)):
-    #         data = re.split(' +', output[i])
-    #         print(data)
+        # output, err = self.execCommand(f"sed -i '/^{vId} /'d vlan /home/ubuntu/vlan")
+        # if not err:
+        #     logger.info(f"VLAN {vId} has been deleted from switch")
+        #     self.getVLANS()
+        # else:
+        #     logger.error(f"An error occurred when trying to add/update vlan {vId}")
 

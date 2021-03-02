@@ -143,28 +143,4 @@ class dbSync(threading.Thread):
         except Error as ee:
             logger.error(f"Error when getting VLANS from DB. VLAN list might be out of date. Error: '{ee}'")
             pass
-        
-
-if __name__ == "__main__":
-    with open("./config.json", "r") as file:
-        config = json.load(file)
-
-    dbHost = config["databaseDetails"]["host"]
-    dbPort = config["databaseDetails"]["port"]
-    dbUsername = config["databaseDetails"]["username"]
-    dbPassword = args["dbpassword"]
-    dbName = config["databaseDetails"]["dbName"]
-    dbClient = dbSync(dbHost, dbPort, dbUsername, dbPassword, dbName)
-
-    #Add vlan
-    dbClient.addOrUpdateVLAN(20, "TEST", "This is another test")
-    print(dbClient.getVLANS())
-
-    #Update vlan
-    dbClient.addOrUpdateVLAN(20, "TEST2", "This is another test")
-    print(dbClient.getVLANS())
-
-    #Delete vlan
-    dbClient.deleteVLAN(20)
-    print(dbClient.getVLANS())
     
