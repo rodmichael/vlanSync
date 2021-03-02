@@ -1,0 +1,13 @@
+{
+    "databaseDetails": {
+        "host": "ec2-3-88-211-21.compute-1.amazonaws.com",
+        "port": 3306,
+        "username": "root",
+        "dbName": "VLANS"
+    },
+    "switchDetails": {
+        "switch": "ec2-3-88-211-21.compute-1.amazonaws.com",
+        "username": "ubuntu",
+        "privateKeyPath": "/Users/rodalvarez/Documents/workspace/rodKey.pem"
+    }
+}
